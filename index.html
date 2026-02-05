@@ -1,5 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FindlayEats - Today's food specials in Findlay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0A1A2F;--card:#11243D;--accent:#D62828;--accent-soft:rgba(214,40,40,0.15);
+      --text:#F8F9FA;--muted:#9CA3AF;--border:#1E2A38;--good:#2ECC71;--closed:#6C757D;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Inter",sans-serif;
+      background:var(--bg);color:var(--text);min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;padding:1.5rem;
+    }
+    .top-header{
+      text-align:center;width:100%;padding:0.75rem 0;margin-bottom:1.25rem;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .top-header-inner{
+      font-size:0.9rem;font-weight:600;color:var(--muted);
+      letter-spacing:0.5px;text-transform:uppercase;
+    }
+    .site-title{color:var(--text);}
+    .dotcom{color:var(--accent);}
+    .shell{
+      width:100%;max-width:720px;background:var(--card);border-radius:1.25rem;
+      border:1px solid var(--border);box-shadow:0 24px 80px rgba(0,0,0,0.4);
+      padding:1.5rem;
+    }
+    .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;}
+    .brand{display:flex;align-items:center;gap:0.4rem;font-size:0.9rem;color:var(--muted);}
+    .brand .logo{font-weight:700;color:var(--text);}
+    .pill{
+      border-radius:999px;padding:0.2rem 0.6rem;background:rgba(255,255,255,0.08);
+      border:1px solid var(--border);font-size:0.75rem;color:var(--text);
+    }
+    .question{font-size:0.95rem;color:var(--muted);margin-bottom:0.25rem;}
+    .answer{font-size:2rem;font-weight:800;margin-bottom:0.4rem;}
+    .answer .city{color:var(--accent);}
+    .subline{font-size:0.85rem;color:var(--muted);margin-bottom:1rem;}
+    .cards{display:flex;flex-direction:column;gap:0.75rem;}
+    .card{
+      background:var(--card);border-radius:0.9rem;border:1px solid var(--border);
+      padding:0.9rem;box-shadow:0 2px 6px rgba(0,0,0,0.25);
+    }
+    .card-header{display:flex;justify-content:space-between;margin-bottom:0.35rem;}
+    .card-title{font-size:1rem;font-weight:700;}
+    .card-title .name{color:var(--accent);}
+    .card-area{font-size:0.8rem;color:var(--muted);}
+    .badge{
+      font-size:0.7rem;padding:0.15rem 0.45rem;border-radius:999px;
+      background:var(--accent-soft);color:var(--accent);font-weight:600;
+    }
+    .deal-main{font-size:0.9rem;margin-bottom:0.35rem;}
+    .meta-row{
+      display:flex;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;color:var(--muted);
+      margin-bottom:0.4rem;
+    }
+    .status-dot{
+      width:8px;height:8px;border-radius:999px;background:var(--good);
+      display:inline-block;margin-right:0.25rem;
+    }
+    .status-dot.closed{background:var(--closed);}
+    .tag-row{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.5rem;}
+    .tag{
+      padding:0.15rem 0.5rem;border-radius:999px;background:rgba(255,255,255,0.08);
+      border:1px solid var(--border);color:var(--muted);font-size:0.75rem;
+    }
+    .tag.good{
+      border-color:rgba(214,40,40,0.4);color:var(--accent);
+      background:rgba(214,40,40,0.15);
+    }
+    .card-actions{display:flex;gap:0.4rem;}
+    .btn{
+      border-radius:999px;padding:0.35rem 0.8rem;font-size:0.8rem;cursor:pointer;
+      border:none;display:inline-flex;align-items:center;gap:0.3rem;
+    }
+    .btn-primary{background:var(--accent);color:white;font-weight:600;}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
+    .bottom-row{
+      display:flex;justify-content:space-between;margin-top:1rem;
+      font-size:0.8rem;color:var(--muted);gap:0.75rem;
+    }
+    .hint{font-size:0.75rem;color:var(--muted);margin-top:0.15rem;}
+  </style>
+</head>
+
+<body>
+  <header class="top-header">
+    <div class="top-header-inner">
+      <span class="site-title">FindlayEats<span class="dotcom">.com</span></span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="top-row">
+      <div class="brand"><span>🍽️</span><span class="logo">FindlayEats</span></div>
+      <div class="pill">📍 Findlay, Ohio</div>
+    </div>
+
+    <div class="question">Where should I eat in Findlay today?</div>
+    <div class="answer">Here are <span class="city">today's local picks.</span></div>
+    <div class="subline">It is <span id="day-label"></span>.</div>
+
+    <div class="cards" id="cards"></div>
+
+    <div class="bottom-row">
+      <div>
+        <button class="btn btn-ghost" id="shuffle-btn">🔁 Shuffle the list</button>
+        <div class="hint">Shuffles only the non‑featured restaurants.</div>
+      </div>
+      <div class="hint">Want your restaurant here? Edit this list in the code.</div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // ------------------------------
+      // DATA
+      // ------------------------------
 const places = [
-  // ⭐ FEATURED
+  // ⭐ FEATURED (daily shuffle)
   {
     name: "Stix",
     area: "Downtown",
@@ -9,8 +132,7 @@ const places = [
     isOpen: true,
     tags: ["sushi", "hibachi", "downtown"],
     featured: true,
-    mapsUrl: "https://maps.google.com/?q=Stix+Findlay+OH",
-    website: "https://stixfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Stix+Findlay+OH"
   },
   {
     name: "Japan West",
@@ -21,11 +143,10 @@ const places = [
     isOpen: true,
     tags: ["sushi", "japanese", "downtown"],
     featured: true,
-    mapsUrl: "https://maps.google.com/?q=Japan+West+Findlay+OH",
-    website: "https://japanwestfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Japan+West+Findlay+OH"
   },
 
-  // ⭐ NON-FEATURED
+  // ⭐ NON-FEATURED (shuffle button affects only these)
   {
     name: "Asian Grill Findlay",
     area: "East side",
@@ -35,8 +156,7 @@ const places = [
     isOpen: true,
     tags: ["asian", "chinese", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Asian+Grill+Findlay+OH",
-    website: "https://asiangrillfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Asian+Grill+Findlay+OH"
   },
   {
     name: "Logan's Irish Pub",
@@ -47,8 +167,7 @@ const places = [
     isOpen: true,
     tags: ["pub", "comfort food", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Logan's+Irish+Pub+Findlay+OH",
-    website: "https://logansirishpubfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Logan's+Irish+Pub+Findlay+OH"
   },
   {
     name: "Alexandria's",
@@ -59,8 +178,7 @@ const places = [
     isOpen: true,
     tags: ["burgers", "drinks", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH",
-    website: "https://alexandriasfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH"
   },
   {
     name: "Oler's Bar & Grill",
@@ -71,8 +189,7 @@ const places = [
     isOpen: true,
     tags: ["tex-mex", "local favorite", "south side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Oler's+Findlay+OH",
-    website: "https://olersbarandgrill.com/"
+    mapsUrl: "https://maps.google.com/?q=Oler's+Findlay+OH"
   },
   {
     name: "Dark Horse Restaurant",
@@ -83,8 +200,7 @@ const places = [
     isOpen: false,
     tags: ["steak", "comfort food", "south side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH",
-    website: "https://www.darkhorsefindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH"
   },
   {
     name: "Legends Steakhouse",
@@ -95,8 +211,7 @@ const places = [
     isOpen: false,
     tags: ["sports bar", "steak", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH",
-    website: "https://www.legendsfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH"
   },
   {
     name: "Circle of Friends",
@@ -107,8 +222,7 @@ const places = [
     isOpen: true,
     tags: ["comfort food", "homestyle", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Circle+of+Friends+Findlay+OH",
-    website: "https://www.circleoffriendsfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Circle+of+Friends+Findlay+OH"
   },
   {
     name: "The Baker's Cafe",
@@ -119,8 +233,7 @@ const places = [
     isOpen: true,
     tags: ["lunch", "coffee", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Baker's+Cafe+Findlay+OH",
-    website: "https://thebakerscafe.com/"
+    mapsUrl: "https://maps.google.com/?q=Baker's+Cafe+Findlay+OH"
   },
   {
     name: "We Serve. Coffee",
@@ -131,8 +244,7 @@ const places = [
     isOpen: false,
     tags: ["coffee", "breakfast", "local"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=We+Serve+Coffee+Findlay+OH",
-    website: "https://weservecoffee.com/"
+    mapsUrl: "https://maps.google.com/?q=We+Serve+Coffee+Findlay+OH"
   },
   {
     name: "Fort Findlay Coffee & Doughnut Shoppe",
@@ -143,8 +255,7 @@ const places = [
     isOpen: false,
     tags: ["breakfast", "donuts", "south side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Fort+Findlay+Coffee+Findlay+OH",
-    website: "https://fortfindlaycoffee.com/"
+    mapsUrl: "https://maps.google.com/?q=Fort+Findlay+Coffee+Findlay+OH"
   },
   {
     name: "Main Street Deli",
@@ -155,8 +266,7 @@ const places = [
     isOpen: true,
     tags: ["sandwiches", "lunch", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH",
-    website: "https://mainstreetdelifindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH"
   },
   {
     name: "The Dough Hook",
@@ -167,8 +277,7 @@ const places = [
     isOpen: true,
     tags: ["deli", "lunch", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH",
-    website: "https://thedoughhook.com/"
+    mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH"
   },
   {
     name: "Casa Fiesta",
@@ -179,8 +288,7 @@ const places = [
     isOpen: true,
     tags: ["mexican", "tacos", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Casa+Fiesta+Findlay+OH",
-    website: "https://casafiestafindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Casa+Fiesta+Findlay+OH"
   },
   {
     name: "La Charrita",
@@ -191,8 +299,7 @@ const places = [
     isOpen: true,
     tags: ["mexican", "authentic", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=La+Charrita+Findlay+OH",
-    website: "https://www.facebook.com/lacharritafindlay/"
+    mapsUrl: "https://maps.google.com/?q=La+Charrita+Findlay+OH"
   },
   {
     name: "Gillig Winery",
@@ -203,8 +310,7 @@ const places = [
     isOpen: true,
     tags: ["wine", "flatbreads", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH",
-    website: "https://gilligwinery.com/"
+    mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH"
   },
   {
     name: "The Wine Merchant",
@@ -215,8 +321,7 @@ const places = [
     isOpen: true,
     tags: ["wine", "cheese", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Wine+Merchant+Findlay+OH",
-    website: "https://thewinemerchantfindlay.com/"
+    mapsUrl: "https://maps.google.com/?q=Wine+Merchant+Findlay+OH"
   },
   {
     name: "The Bourbon Affair",
@@ -227,8 +332,7 @@ const places = [
     isOpen: true,
     tags: ["bourbon", "drinks", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH",
-    website: "https://thebourbonaffair.com/"
+    mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH"
   }
 ];
 
@@ -380,5 +484,3 @@ const places = [
   </script>
 </body>
 </html>
-
-
