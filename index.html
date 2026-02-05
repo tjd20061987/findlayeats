@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #F8F9FA;          /* soft off-white */
-      --card: #FFFFFF;        /* clean white */
+      --bg: #0A1A2F;          /* deep navy background */
+      --card: #11243D;        /* slightly lighter navy card */
       --accent: #D62828;      /* modern red */
-      --accent-soft: rgba(214, 40, 40, 0.12);
-      --text: #001219;        /* deep navy */
-      --muted: #6C757D;       /* slate gray */
-      --border: #DEE2E6;      /* light gray border */
+      --accent-soft: rgba(214, 40, 40, 0.15);
+      --text: #F8F9FA;        /* soft white */
+      --muted: #9CA3AF;       /* cool gray */
+      --border: #1E2A38;      /* dark slate border */
       --good: #2ECC71;        /* green for open */
       --closed: #6C757D;      /* muted gray */
     }
@@ -40,7 +40,7 @@
       background: var(--card);
       border-radius: 1.25rem;
       border: 1px solid var(--border);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
       padding: 1.5rem 1.5rem 1.25rem;
     }
 
@@ -68,7 +68,7 @@
     .pill {
       border-radius: 999px;
       padding: 0.2rem 0.6rem;
-      background: #E9ECEF;
+      background: rgba(255,255,255,0.08);
       border: 1px solid var(--border);
       font-size: 0.75rem;
       color: var(--text);
@@ -116,7 +116,7 @@
       border-radius: 0.9rem;
       border: 1px solid var(--border);
       padding: 0.9rem 0.9rem 0.8rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
 
     .card-header {
@@ -197,7 +197,7 @@
     .tag {
       padding: 0.15rem 0.5rem;
       border-radius: 999px;
-      background: #E9ECEF;
+      background: rgba(255,255,255,0.08);
       border: 1px solid var(--border);
       color: var(--muted);
     }
@@ -205,7 +205,7 @@
     .tag.good {
       border-color: rgba(214, 40, 40, 0.4);
       color: var(--accent);
-      background: rgba(214, 40, 40, 0.12);
+      background: rgba(214, 40, 40, 0.15);
     }
 
     .card-actions {
