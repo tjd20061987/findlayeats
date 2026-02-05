@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FindlayEats – Where should I eat in Findlay today?</title>
+  <title>FindlayEats – Today’s food specials in Findlay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -14,6 +14,7 @@
       --muted: #9ca3af;
       --border: #1f2937;
       --good: #22c55e;
+      --closed: #6b7280;
     }
 
     * {
@@ -35,7 +36,7 @@
 
     .shell {
       width: 100%;
-      max-width: 640px;
+      max-width: 720px;
       background: rgba(15, 23, 42, 0.9);
       border-radius: 1.25rem;
       border: 1px solid var(--border);
@@ -79,29 +80,77 @@
     .question {
       font-size: 0.95rem;
       color: var(--muted);
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.25rem;
     }
 
     .answer {
       font-size: clamp(1.8rem, 4vw, 2.2rem);
       font-weight: 800;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.4rem;
     }
 
-    .answer span.place {
+    .answer span.city {
       color: var(--accent);
     }
 
-    .deal-card {
+    .subline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .subline span#day-label {
+      color: var(--text);
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card {
       background: rgba(15, 23, 42, 0.9);
       border-radius: 0.9rem;
       border: 1px solid var(--border);
       padding: 0.9rem 0.9rem 0.8rem;
-      margin-bottom: 0.9rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .card-title span.name {
+      color: var(--accent);
+    }
+
+    .card-area {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      white-space: nowrap;
+      align-self: flex-start;
     }
 
     .deal-main {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       margin-bottom: 0.35rem;
     }
 
@@ -124,11 +173,23 @@
       gap: 0.25rem;
     }
 
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--good);
+    }
+
+    .status-dot.closed {
+      background: var(--closed);
+    }
+
     .tag-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
       font-size: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     .tag {
@@ -145,26 +206,17 @@
       background: rgba(22, 163, 74, 0.12);
     }
 
-    .bottom-row {
+    .card-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 0.5rem;
       flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.8rem;
     }
 
     .btn {
       border-radius: 999px;
       border: none;
-      padding: 0.4rem 0.9rem;
+      padding: 0.35rem 0.8rem;
       font-size: 0.8rem;
       cursor: pointer;
       display: inline-flex;
@@ -185,25 +237,32 @@
       border: 1px solid var(--border);
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--good);
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
     }
 
     .hint {
       font-size: 0.75rem;
       color: var(--muted);
-      margin-top: 0.25rem;
+      margin-top: 0.15rem;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
       .shell {
         padding: 1.25rem 1.1rem 1rem;
       }
       .answer {
         font-size: 1.6rem;
+      }
+      .bottom-row {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -215,36 +274,28 @@
         <span>🍽️</span>
         <span class="logo">FindlayEats</span>
       </div>
-      <div class="pill">📍 Findlay, Ohio</div>
+      <div class="pill">
+        📍 Findlay, Ohio
+      </div>
     </div>
 
     <div class="question">Where should I eat in Findlay today?</div>
     <div class="answer">
-      Go to <span class="place" id="place-name"></span>.
+      Here are <span class="city">today’s local picks.</span>
+    </div>
+    <div class="subline">
+      Handful of spots with good deals, updated by you. It’s <span id="day-label"></span>.
     </div>
 
-    <div class="deal-card">
-      <div class="deal-main" id="deal-text"></div>
-      <div class="meta-row">
-        <span>📅 <span id="day-label"></span></span>
-        <span>🕒 <span id="time-window"></span></span>
-        <span><span class="status-dot"></span> <span id="open-status"></span></span>
-      </div>
-      <div class="tag-row" id="tags"></div>
-    </div>
+    <div class="cards" id="cards"></div>
 
     <div class="bottom-row">
-      <div class="btn-row">
-        <button class="btn btn-primary" type="button" id="another-btn">
-          🔁 Show me another
-        </button>
-        <button class="btn btn-ghost" type="button" id="directions-btn">
-          📍 Directions
-        </button>
+      <div>
+        <button class="btn btn-ghost" type="button" id="shuffle-btn">🔁 Shuffle the list</button>
+        <div class="hint">No chains. Just local places worth trying today.</div>
       </div>
       <div>
-        <div id="area-label"></div>
-        <div class="hint">One local pick at a time. No chains, no noise.</div>
+        <div class="hint">Want your restaurant here? Add it manually in the code for now.</div>
       </div>
     </div>
   </div>
@@ -257,7 +308,9 @@
         deal: "They’ve got an $8.99 burger + fries lunch special that’s hard to beat.",
         timeWindow: "11 AM – 3 PM",
         openStatus: "Open now · casual, family-friendly",
+        isOpen: true,
         tags: ["cheap eats", "lunch", "local favorite"],
+        featured: true,
         mapsUrl: "https://maps.google.com/?q=Downtown+Diner+Findlay+OH"
       },
       {
@@ -266,7 +319,9 @@
         deal: "$2 street tacos all day and a free drink if you grab four or more.",
         timeWindow: "Noon – 8 PM",
         openStatus: "Open now · food truck, quick bite",
+        isOpen: true,
         tags: ["food truck", "cheap eats", "downtown"],
+        featured: true,
         mapsUrl: "https://maps.google.com/?q=Main+St+and+Main+Cross+Findlay+OH"
       },
       {
@@ -275,7 +330,9 @@
         deal: "Try the $5 pint + flatbread combo during their evening special.",
         timeWindow: "5 PM – 7 PM",
         openStatus: "Open later · great for after work",
+        isOpen: false,
         tags: ["happy hour", "local beer", "downtown"],
+        featured: false,
         mapsUrl: "https://maps.google.com/?q=Findlay+Brewing+Co"
       },
       {
@@ -284,66 +341,134 @@
         deal: "Go early for the $6.99 breakfast platter and free coffee with a pastry.",
         timeWindow: "7 AM – 11 AM",
         openStatus: "Morning only · cozy breakfast spot",
+        isOpen: false,
         tags: ["breakfast", "cheap eats", "family-friendly"],
+        featured: false,
         mapsUrl: "https://maps.google.com/?q=Family+Table+Cafe+Findlay+OH"
+      },
+      {
+        name: "Riverbend Grill",
+        area: "East side",
+        deal: "Half-price appetizers and $3 drafts during their early evening special.",
+        timeWindow: "4 PM – 6 PM",
+        openStatus: "Open later · good for groups",
+        isOpen: false,
+        tags: ["happy hour", "family-friendly"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Riverbend+Grill+Findlay+OH"
       }
     ];
 
-    const placeNameEl = document.getElementById("place-name");
-    const dealTextEl = document.getElementById("deal-text");
+    const cardsEl = document.getElementById("cards");
     const dayLabelEl = document.getElementById("day-label");
-    const timeWindowEl = document.getElementById("time-window");
-    const openStatusEl = document.getElementById("open-status");
-    const tagsEl = document.getElementById("tags");
-    const areaLabelEl = document.getElementById("area-label");
-    const anotherBtn = document.getElementById("another-btn");
-    const directionsBtn = document.getElementById("directions-btn");
-
-    let currentIndex = -1;
+    const shuffleBtn = document.getElementById("shuffle-btn");
 
     function formatDay() {
       const d = new Date();
-      const opts = { weekday: "long" };
+      const opts = { weekday: "long", month: "long", day: "numeric" };
       return d.toLocaleDateString(undefined, opts);
     }
 
-    function pickRandomIndex() {
-      if (places.length <= 1) return 0;
-      let idx;
-      do {
-        idx = Math.floor(Math.random() * places.length);
-      } while (idx === currentIndex);
-      return idx;
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
     }
 
-    function renderPlace() {
-      const idx = pickRandomIndex();
-      currentIndex = idx;
-      const p = places[idx];
+    function renderList() {
+      cardsEl.innerHTML = "";
 
-      placeNameEl.textContent = p.name;
-      dealTextEl.innerHTML = `<strong>Today’s move:</strong> ${p.deal}`;
-      dayLabelEl.textContent = formatDay();
-      timeWindowEl.textContent = p.timeWindow;
-      openStatusEl.textContent = p.openStatus;
-      areaLabelEl.textContent = p.area;
+      // featured first, then shuffle within groups
+      const featured = shuffle(places.filter(p => p.featured));
+      const others = shuffle(places.filter(p => !p.featured));
+      const ordered = [...featured, ...others];
 
-      tagsEl.innerHTML = "";
-      p.tags.forEach((t, i) => {
-        const span = document.createElement("span");
-        span.className = "tag" + (i === 0 ? " good" : "");
-        span.textContent = t;
-        tagsEl.appendChild(span);
+      // show top N (e.g., 4)
+      const visible = ordered.slice(0, 4);
+
+      visible.forEach(p => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const header = document.createElement("div");
+        header.className = "card-header";
+
+        const titleWrap = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "card-title";
+        title.innerHTML = `<span class="name">${p.name}</span>`;
+        const area = document.createElement("div");
+        area.className = "card-area";
+        area.textContent = p.area;
+        titleWrap.appendChild(title);
+        titleWrap.appendChild(area);
+
+        header.appendChild(titleWrap);
+
+        if (p.featured) {
+          const badge = document.createElement("div");
+          badge.className = "badge";
+          badge.textContent = "Today’s pick";
+          header.appendChild(badge);
+        }
+
+        const deal = document.createElement("div");
+        deal.className = "deal-main";
+        deal.innerHTML = `<strong>Today’s deal:</strong> ${p.deal}`;
+
+        const meta = document.createElement("div");
+        meta.className = "meta-row";
+
+        const timeSpan = document.createElement("span");
+        timeSpan.innerHTML = `🕒 ${p.timeWindow}`;
+
+        const statusSpan = document.createElement("span");
+        const dot = document.createElement("span");
+        dot.className = "status-dot" + (p.isOpen ? "" : " closed");
+        const statusText = document.createElement("span");
+        statusText.textContent = p.openStatus;
+        statusSpan.appendChild(dot);
+        statusSpan.appendChild(statusText);
+
+        meta.appendChild(timeSpan);
+        meta.appendChild(statusSpan);
+
+        const tagsRow = document.createElement("div");
+        tagsRow.className = "tag-row";
+        p.tags.forEach((t, i) => {
+          const tag = document.createElement("span");
+          tag.className = "tag" + (i === 0 ? " good" : "");
+          tag.textContent = t;
+          tagsRow.appendChild(tag);
+        });
+
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+
+        const directionsBtn = document.createElement("button");
+        directionsBtn.className = "btn btn-primary";
+        directionsBtn.type = "button";
+        directionsBtn.textContent = "📍 Directions";
+        directionsBtn.onclick = () => window.open(p.mapsUrl, "_blank");
+
+        actions.appendChild(directionsBtn);
+
+        card.appendChild(header);
+        card.appendChild(deal);
+        card.appendChild(meta);
+        card.appendChild(tagsRow);
+        card.appendChild(actions);
+
+        cardsEl.appendChild(card);
       });
-
-      directionsBtn.onclick = () => {
-        window.open(p.mapsUrl, "_blank");
-      };
     }
 
-    anotherBtn.addEventListener("click", renderPlace);
-
-    renderPlace();
+    dayLabelEl.textContent = formatDay();
+    shuffleBtn.addEventListener("click", renderList);
+    renderList();
   </script>
 </body>
 </html>
