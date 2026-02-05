@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FindlayEats – Where should I eat in Findlay today?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #020617;
+      --accent: #f97316;
+      --accent-soft: rgba(249, 115, 22, 0.12);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --good: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 640px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+      padding: 1.5rem 1.5rem 1.25rem;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .brand span.logo {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .question {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .answer {
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .answer span.place {
+      color: var(--accent);
+    }
+
+    .deal-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 0.9rem;
+      border: 1px solid var(--border);
+      padding: 0.9rem 0.9rem 0.8rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .deal-main {
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .deal-main strong {
+      color: var(--text);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .meta-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+    }
+
+    .tag {
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .tag.good {
+      border-color: rgba(34, 197, 94, 0.4);
+      color: #bbf7d0;
+      background: rgba(22, 163, 74, 0.12);
+    }
+
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--good);
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 480px) {
+      .shell {
+        padding: 1.25rem 1.1rem 1rem;
+      }
+      .answer {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top-row">
+      <div class="brand">
+        <span>🍽️</span>
+        <span class="logo">FindlayEats</span>
+      </div>
+      <div class="pill">📍 Findlay, Ohio</div>
+    </div>
+
+    <div class="question">Where should I eat in Findlay today?</div>
+    <div class="answer">
+      Go to <span class="place" id="place-name"></span>.
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-main" id="deal-text"></div>
+      <div class="meta-row">
+        <span>📅 <span id="day-label"></span></span>
+        <span>🕒 <span id="time-window"></span></span>
+        <span><span class="status-dot"></span> <span id="open-status"></span></span>
+      </div>
+      <div class="tag-row" id="tags"></div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="btn-row">
+        <button class="btn btn-primary" type="button" id="another-btn">
+          🔁 Show me another
+        </button>
+        <button class="btn btn-ghost" type="button" id="directions-btn">
+          📍 Directions
+        </button>
+      </div>
+      <div>
+        <div id="area-label"></div>
+        <div class="hint">One local pick at a time. No chains, no noise.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const places = [
+      {
+        name: "Downtown Diner",
+        area: "Downtown",
+        deal: "They’ve got an $8.99 burger + fries lunch special that’s hard to beat.",
+        timeWindow: "11 AM – 3 PM",
+        openStatus: "Open now · casual, family-friendly",
+        tags: ["cheap eats", "lunch", "local favorite"],
+        mapsUrl: "https://maps.google.com/?q=Downtown+Diner+Findlay+OH"
+      },
+      {
+        name: "Blanchard Street Tacos (Truck)",
+        area: "Downtown",
+        deal: "$2 street tacos all day and a free drink if you grab four or more.",
+        timeWindow: "Noon – 8 PM",
+        openStatus: "Open now · food truck, quick bite",
+        tags: ["food truck", "cheap eats", "downtown"],
+        mapsUrl: "https://maps.google.com/?q=Main+St+and+Main+Cross+Findlay+OH"
+      },
+      {
+        name: "Findlay Brewing Co.",
+        area: "Downtown",
+        deal: "Try the $5 pint + flatbread combo during their evening special.",
+        timeWindow: "5 PM – 7 PM",
+        openStatus: "Open later · great for after work",
+        tags: ["happy hour", "local beer", "downtown"],
+        mapsUrl: "https://maps.google.com/?q=Findlay+Brewing+Co"
+      },
+      {
+        name: "Family Table Café",
+        area: "North side",
+        deal: "Go early for the $6.99 breakfast platter and free coffee with a pastry.",
+        timeWindow: "7 AM – 11 AM",
+        openStatus: "Morning only · cozy breakfast spot",
+        tags: ["breakfast", "cheap eats", "family-friendly"],
+        mapsUrl: "https://maps.google.com/?q=Family+Table+Cafe+Findlay+OH"
+      }
+    ];
+
+    const placeNameEl = document.getElementById("place-name");
+    const dealTextEl = document.getElementById("deal-text");
+    const dayLabelEl = document.getElementById("day-label");
+    const timeWindowEl = document.getElementById("time-window");
+    const openStatusEl = document.getElementById("open-status");
+    const tagsEl = document.getElementById("tags");
+    const areaLabelEl = document.getElementById("area-label");
+    const anotherBtn = document.getElementById("another-btn");
+    const directionsBtn = document.getElementById("directions-btn");
+
+    let currentIndex = -1;
+
+    function formatDay() {
+      const d = new Date();
+      const opts = { weekday: "long" };
+      return d.toLocaleDateString(undefined, opts);
+    }
+
+    function pickRandomIndex() {
+      if (places.length <= 1) return 0;
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * places.length);
+      } while (idx === currentIndex);
+      return idx;
+    }
+
+    function renderPlace() {
+      const idx = pickRandomIndex();
+      currentIndex = idx;
+      const p = places[idx];
+
+      placeNameEl.textContent = p.name;
+      dealTextEl.innerHTML = `<strong>Today’s move:</strong> ${p.deal}`;
+      dayLabelEl.textContent = formatDay();
+      timeWindowEl.textContent = p.timeWindow;
+      openStatusEl.textContent = p.openStatus;
+      areaLabelEl.textContent = p.area;
+
+      tagsEl.innerHTML = "";
+      p.tags.forEach((t, i) => {
+        const span = document.createElement("span");
+        span.className = "tag" + (i === 0 ? " good" : "");
+        span.textContent = t;
+        tagsEl.appendChild(span);
+      });
+
+      directionsBtn.onclick = () => {
+        window.open(p.mapsUrl, "_blank");
+      };
+    }
+
+    anotherBtn.addEventListener("click", renderPlace);
+
+    renderPlace();
+  </script>
+</body>
+</html>
