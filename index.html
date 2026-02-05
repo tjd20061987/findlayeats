@@ -471,7 +471,7 @@ directionsBtn.onclick = function () {
 };
 actions.appendChild(directionsBtn);
 
-// Website button (only if website exists)
+// Website button (works for ALL restaurants)
 if (p.website) {
   const websiteBtn = document.createElement("button");
   websiteBtn.className = "btn btn-ghost";
@@ -481,6 +481,8 @@ if (p.website) {
   };
   actions.appendChild(websiteBtn);
 }
+
+card.appendChild(actions);
           actions.appendChild(directionsBtn);
 
           card.appendChild(header);
@@ -514,5 +516,6 @@ if (p.website) {
   </script>
 </body>
 </html>
+
 
 
