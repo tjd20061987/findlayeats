@@ -459,16 +459,28 @@
             tagsRow.appendChild(tag);
           });
 
-          const actions = document.createElement("div");
-          actions.className = "card-actions";
+const actions = document.createElement("div");
+actions.className = "card-actions";
 
-          const directionsBtn = document.createElement("button");
-          directionsBtn.className = "btn btn-primary";
-          directionsBtn.textContent = "📍 Directions";
-          directionsBtn.onclick = function () {
-            window.open(p.mapsUrl, "_blank");
-          };
+// Directions button
+const directionsBtn = document.createElement("button");
+directionsBtn.className = "btn btn-primary";
+directionsBtn.textContent = "📍 Directions";
+directionsBtn.onclick = function () {
+  window.open(p.mapsUrl, "_blank");
+};
+actions.appendChild(directionsBtn);
 
+// Website button (only if website exists)
+if (p.website) {
+  const websiteBtn = document.createElement("button");
+  websiteBtn.className = "btn btn-ghost";
+  websiteBtn.textContent = "🌐 Website";
+  websiteBtn.onclick = function () {
+    window.open(p.website, "_blank");
+  };
+  actions.appendChild(websiteBtn);
+}
           actions.appendChild(directionsBtn);
 
           card.appendChild(header);
@@ -502,4 +514,5 @@
   </script>
 </body>
 </html>
+
 
