@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FindlayEats – Today’s food specials in Findlay</title>
+  <title>FindlayEats - Today's food specials in Findlay</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -25,13 +25,12 @@
       color: var(--text);
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 1.5rem;
       flex-direction: column;
     }
 
-    /* --- NEW HEADER --- */
     .top-header {
       width: 100%;
       text-align: center;
@@ -56,7 +55,6 @@
       color: var(--accent);
     }
 
-    /* --- MAIN CARD SHELL --- */
     .shell {
       width: 100%;
       max-width: 720px;
@@ -65,6 +63,7 @@
       border: 1px solid var(--border);
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
       padding: 1.5rem;
+      margin: 0 auto;
     }
 
     .top-row {
@@ -148,6 +147,8 @@
       height: 8px;
       border-radius: 999px;
       background: var(--good);
+      display: inline-block;
+      margin-right: 0.25rem;
     }
 
     .status-dot.closed { background: var(--closed); }
@@ -195,6 +196,7 @@
     .hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem; }
 
     @media (max-width: 520px) {
+      body { padding: 1rem; }
       .shell { padding: 1.25rem 1.1rem; }
       .answer { font-size: 1.7rem; }
       .bottom-row { flex-direction: column; align-items: flex-start; }
@@ -203,7 +205,6 @@
 </head>
 <body>
 
-  <!-- NEW HEADER -->
   <header class="top-header">
     <div class="top-header-inner">
       <span class="site-title">FindlayEats<span class="dotcom">.com</span></span>
@@ -220,9 +221,9 @@
     </div>
 
     <div class="question">Where should I eat in Findlay today?</div>
-    <div class="answer">Here are <span class="city">today’s local picks.</span></div>
+    <div class="answer">Here are <span class="city">today's local picks.</span></div>
     <div class="subline">
-      Handful of spots with good deals, updated by you. It’s <span id="day-label"></span>.
+      Handful of spots with good deals, updated by you. It is <span id="day-label"></span>.
     </div>
 
     <div class="cards" id="cards"></div>
@@ -237,218 +238,334 @@
   </div>
 
   <script>
-    const places = [
-      {
-        name: "Stix",
-        area: "Downtown",
-        deal: "Half‑price sushi rolls on Wednesdays and great hibachi portions.",
-        timeWindow: "11 AM – 9 PM",
-        openStatus: "Open now · sushi & hibachi",
-        isOpen: true,
-        tags: ["sushi", "hibachi", "downtown"],
-        featured: true,
-        mapsUrl: "https://maps.google.com/?q=Stix+Findlay+OH"
-      },
-      {
-        name: "Japan West",
-        area: "Downtown",
-        deal: "Fresh sushi and bento boxes — locals swear by the lunch specials.",
-        timeWindow: "11 AM – 2 PM",
-        openStatus: "Open now · sushi & Japanese",
-        isOpen: true,
-        tags: ["sushi", "japanese", "downtown"],
-        featured: true,
-        mapsUrl: "https://maps.google.com/?q=Japan+West+Findlay+OH"
-      },
-      {
-        name: "Asian Grill Findlay",
-        area: "East side",
-        deal: "Chinese and Thai‑inspired dishes with generous portions.",
-        timeWindow: "11 AM – 8 PM",
-        openStatus: "Open now · Asian cuisine",
-        isOpen: true,
-        tags: ["asian", "chinese", "east side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Asian+Grill+Findlay+OH"
-      },
-      {
-        name: "Logan's Irish Pub",
-        area: "Downtown",
-        deal: "Shepherd’s pie and $4 drafts during afternoon happy hour.",
-        timeWindow: "3 PM – 6 PM",
-        openStatus: "Open now · cozy pub",
-        isOpen: true,
-        tags: ["pub", "comfort food", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Logan's+Irish+Pub+Findlay+OH"
-      },
-      {
-        name: "Alexandria’s",
-        area: "Downtown",
-        deal: "Great burgers and rooftop drinks when the weather’s good.",
-        timeWindow: "11 AM – 10 PM",
-        openStatus: "Open now · bar & grill",
-        isOpen: true,
-        tags: ["burgers", "drinks", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH"
-      },
-      {
-        name: "Oler’s Bar & Grill",
-        area: "South side",
-        deal: "Tex‑Mex classics and their famous wet burrito.",
-        timeWindow: "11 AM – 9 PM",
-        openStatus: "Open now · Tex‑Mex",
-        isOpen: true,
-        tags: ["tex-mex", "local favorite", "south side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Oler's+Findlay+OH"
-      },
-      {
-        name: "Dark Horse Restaurant",
-        area: "South side",
-        deal: "Steak specials and hearty comfort food.",
-        timeWindow: "4 PM – 8 PM",
-        openStatus: "Open later · steakhouse",
-        isOpen: false,
-        tags: ["steak", "comfort food", "south side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH"
-      },
-      {
-        name: "Legends Steakhouse",
-        area: "East side",
-        deal: "Half‑off appetizers during game nights.",
-        timeWindow: "5 PM – 9 PM",
-        openStatus: "Open later · sports bar",
-        isOpen: false,
-        tags: ["sports bar", "steak", "east side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH"
-      },
-      {
-        name: "Circle of Friends",
-        area: "Downtown",
-        deal: "Homestyle comfort food with rotating daily specials.",
-        timeWindow: "11 AM – 7 PM",
-        openStatus: "Open now · homestyle cooking",
-        isOpen: true,
-        tags: ["comfort food", "homestyle", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Circle+of+Friends+Findlay+OH"
-      },
-      {
-        name: "The Baker’s Café",
-        area: "Downtown",
-        deal: "Lunch combos under $10 and fresh pastries daily.",
-        timeWindow: "10 AM – 3 PM",
-        openStatus: "Open now · bakery & café",
-        isOpen: true,
-        tags: ["lunch", "coffee", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Baker's+Cafe+Findlay+OH"
-      },
-      {
-        name: "We Serve. Coffee",
-        area: "Downtown",
-        deal: "Locally roasted coffee and $2 off breakfast sandwiches before 10 AM.",
-        timeWindow: "7 AM – 10 AM",
-        openStatus: "Morning only · local roastery",
-        isOpen: false,
-        tags: ["coffee", "breakfast", "local"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=We+Serve+Coffee+Findlay+OH"
-      },
-      {
-        name: "Fort Findlay Coffee & Doughnut Shoppe",
-        area: "South side",
-        deal: "Classic donuts and breakfast sandwiches made fresh daily.",
-        timeWindow: "6 AM – 1 PM",
-        openStatus: "Morning only · donuts",
-        isOpen: false,
-        tags: ["breakfast", "donuts", "south side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Fort+Findlay+Coffee+Findlay+OH"
-      },
-      {
-        name: "Main Street Deli",
-        area: "Downtown",
-        deal: "Huge sandwiches and $1 off any combo before noon.",
-        timeWindow: "10 AM – 12 PM",
-        openStatus: "Open now · deli",
-        isOpen: true,
-        tags: ["sandwiches", "lunch", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH"
-      },
-      {
-        name: "The Dough Hook",
-        area: "Downtown",
-        deal: "Fresh deli sandwiches and butcher‑shop specials.",
-        timeWindow: "10 AM – 3 PM",
-        openStatus: "Open now · deli",
-        isOpen: true,
-        tags: ["deli", "lunch", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH"
-      },
-      {
-        name: "Casa Fiesta",
-        area: "East side",
-        deal: "$1.99 tacos on Tuesdays and strong margaritas.",
-        timeWindow: "All day Tuesday",
-        openStatus: "Open now · Mexican",
-        isOpen: true,
-        tags: ["mexican", "tacos", "east side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Casa+Fiesta+Findlay+OH"
-      },
-      {
-        name: "La Charrita",
-        area: "Downtown",
-        deal: "Authentic Mexican plates with fast service and great prices.",
-        timeWindow: "11 AM – 8 PM",
-        openStatus: "Open now · Mexican",
-        isOpen: true,
-        tags: ["mexican", "authentic", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=La+Charrita+Findlay+OH"
-      },
-      {
-        name: "Gillig Winery",
-        area: "East side",
-        deal: "Flatbread + wine flight combo is a local favorite.",
-        timeWindow: "4 PM – 8 PM",
-        openStatus: "Open now · winery",
-        isOpen: true,
-        tags: ["wine", "flatbreads", "east side"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH"
-      },
-      {
-        name: "The Wine Merchant",
-        area: "Downtown",
-        deal: "Wine flights and artisan cheese boards.",
-        timeWindow: "4 PM – 8 PM",
-        openStatus: "Open now · wine bar",
-        isOpen: true,
-        tags: ["wine", "cheese", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Wine+Merchant+Findlay+OH"
-      },
-      {
-        name: "The Bourbon Affair",
-        area: "Downtown",
-        deal: "Premium bourbon flights and small plates.",
-        timeWindow: "5 PM – 11 PM",
-        openStatus: "Open now · bourbon bar",
-        isOpen: true,
-        tags: ["bourbon", "drinks", "downtown"],
-        featured: false,
-        mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH"
-      }
-    ];
+    document.addEventListener("DOMContentLoaded", function () {
+      const places = [
+        {
+          name: "Stix",
+          area: "Downtown",
+          deal: "Half-price sushi rolls on Wednesdays and great hibachi portions.",
+          timeWindow: "11 AM - 9 PM",
+          openStatus: "Open now · sushi & hibachi",
+          isOpen: true,
+          tags: ["sushi", "hibachi", "downtown"],
+          featured: true,
+          mapsUrl: "https://maps.google.com/?q=Stix+Findlay+OH"
+        },
+        {
+          name: "Japan West",
+          area: "Downtown",
+          deal: "Fresh sushi and bento boxes - locals swear by the lunch specials.",
+          timeWindow: "11 AM - 2 PM",
+          openStatus: "Open now · sushi & Japanese",
+          isOpen: true,
+          tags: ["sushi", "japanese", "downtown"],
+          featured: true,
+          mapsUrl: "https://maps.google.com/?q=Japan+West+Findlay+OH"
+        },
+        {
+          name: "Asian Grill Findlay",
+          area: "East side",
+          deal: "Chinese and Thai-inspired dishes with generous portions.",
+          timeWindow: "11 AM - 8 PM",
+          openStatus: "Open now · Asian cuisine",
+          isOpen: true,
+          tags: ["asian", "chinese", "east side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Asian+Grill+Findlay+OH"
+        },
+        {
+          name: "Logan's Irish Pub",
+          area: "Downtown",
+          deal: "Shepherd's pie and $4 drafts during afternoon happy hour.",
+          timeWindow: "3 PM - 6 PM",
+          openStatus: "Open now · cozy pub",
+          isOpen: true,
+          tags: ["pub", "comfort food", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Logan's+Irish+Pub+Findlay+OH"
+        },
+        {
+          name: "Alexandria's",
+          area: "Downtown",
+          deal: "Great burgers and rooftop drinks when the weather is good.",
+          timeWindow: "11 AM - 10 PM",
+          openStatus: "Open now · bar & grill",
+          isOpen: true,
+          tags: ["burgers", "drinks", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH"
+        },
+        {
+          name: "Oler's Bar & Grill",
+          area: "South side",
+          deal: "Tex-Mex classics and their famous wet burrito.",
+          timeWindow: "11 AM - 9 PM",
+          openStatus: "Open now · Tex-Mex",
+          isOpen: true,
+          tags: ["tex-mex", "local favorite", "south side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Oler's+Findlay+OH"
+        },
+        {
+          name: "Dark Horse Restaurant",
+          area: "South side",
+          deal: "Steak specials and hearty comfort food.",
+          timeWindow: "4 PM - 8 PM",
+          openStatus: "Open later · steakhouse",
+          isOpen: false,
+          tags: ["steak", "comfort food", "south side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH"
+        },
+        {
+          name: "Legends Steakhouse",
+          area: "East side",
+          deal: "Half-off appetizers during game nights.",
+          timeWindow: "5 PM - 9 PM",
+          openStatus: "Open later · sports bar",
+          isOpen: false,
+          tags: ["sports bar", "steak", "east side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH"
+        },
+        {
+          name: "Circle of Friends",
+          area: "Downtown",
+          deal: "Homestyle comfort food with rotating daily specials.",
+          timeWindow: "11 AM - 7 PM",
+          openStatus: "Open now · homestyle cooking",
+          isOpen: true,
+          tags: ["comfort food", "homestyle", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Circle+of+Friends+Findlay+OH"
+        },
+        {
+          name: "The Baker's Cafe",
+          area: "Downtown",
+          deal: "Lunch combos under $10 and fresh pastries daily.",
+          timeWindow: "10 AM - 3 PM",
+          openStatus: "Open now · bakery & cafe",
+          isOpen: true,
+          tags: ["lunch", "coffee", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Baker's+Cafe+Findlay+OH"
+        },
+        {
+          name: "We Serve. Coffee",
+          area: "Downtown",
+          deal: "Locally roasted coffee and $2 off breakfast sandwiches before 10 AM.",
+          timeWindow: "7 AM - 10 AM",
+          openStatus: "Morning only · local roastery",
+          isOpen: false,
+          tags: ["coffee", "breakfast", "local"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=We+Serve+Coffee+Findlay+OH"
+        },
+        {
+          name: "Fort Findlay Coffee & Doughnut Shoppe",
+          area: "South side",
+          deal: "Classic donuts and breakfast sandwiches made fresh daily.",
+          timeWindow: "6 AM - 1 PM",
+          openStatus: "Morning only · donuts",
+          isOpen: false,
+          tags: ["breakfast", "donuts", "south side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Fort+Findlay+Coffee+Findlay+OH"
+        },
+        {
+          name: "Main Street Deli",
+          area: "Downtown",
+          deal: "Huge sandwiches and $1 off any combo before noon.",
+          timeWindow: "10 AM - 12 PM",
+          openStatus: "Open now · deli",
+          isOpen: true,
+          tags: ["sandwiches", "lunch", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH"
+        },
+        {
+          name: "The Dough Hook",
+          area: "Downtown",
+          deal: "Fresh deli sandwiches and butcher-shop specials.",
+          timeWindow: "10 AM - 3 PM",
+          openStatus: "Open now · deli",
+          isOpen: true,
+          tags: ["deli", "lunch", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH"
+        },
+        {
+          name: "Casa Fiesta",
+          area: "East side",
+          deal: "$1.99 tacos on Tuesdays and strong margaritas.",
+          timeWindow: "All day Tuesday",
+          openStatus: "Open now · Mexican",
+          isOpen: true,
+          tags: ["mexican", "tacos", "east side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Casa+Fiesta+Findlay+OH"
+        },
+        {
+          name: "La Charrita",
+          area: "Downtown",
+          deal: "Authentic Mexican plates with fast service and great prices.",
+          timeWindow: "11 AM - 8 PM",
+          openStatus: "Open now · Mexican",
+          isOpen: true,
+          tags: ["mexican", "authentic", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=La+Charrita+Findlay+OH"
+        },
+        {
+          name: "Gillig Winery",
+          area: "East side",
+          deal: "Flatbread + wine flight combo is a local favorite.",
+          timeWindow: "4 PM - 8 PM",
+          openStatus: "Open now · winery",
+          isOpen: true,
+          tags: ["wine", "flatbreads", "east side"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH"
+        },
+        {
+          name: "The Wine Merchant",
+          area: "Downtown",
+          deal: "Wine flights and artisan cheese boards.",
+          timeWindow: "4 PM - 8 PM",
+          openStatus: "Open now · wine bar",
+          isOpen: true,
+          tags: ["wine", "cheese", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Wine+Merchant+Findlay+OH"
+        },
+        {
+          name: "The Bourbon Affair",
+          area: "Downtown",
+          deal: "Premium bourbon flights and small plates.",
+          timeWindow: "5 PM - 11 PM",
+          openStatus: "Open now · bourbon bar",
+          isOpen: true,
+          tags: ["bourbon", "drinks", "downtown"],
+          featured: false,
+          mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH"
+        }
+      ];
 
-    const cardsEl = document.getElementById("cards");
-    const dayLabelEl = document.getElementById("day-label");
-    const
+      const cardsEl = document.getElementById("cards");
+      const dayLabelEl = document.getElementById("day-label");
+      const shuffleBtn = document.getElementById("shuffle-btn");
+
+      function formatDay() {
+        const d = new Date();
+        return d.toLocaleDateString(undefined, {
+          weekday: "long",
+          month: "long",
+          day: "numeric"
+        });
+      }
+
+      function shuffle(array) {
+        const arr = array.slice();
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+        return arr;
+      }
+
+      function renderList() {
+        cardsEl.innerHTML = "";
+
+        const featured = shuffle(places.filter(p => p.featured));
+        const others = shuffle(places.filter(p => !p.featured));
+        const ordered = featured.concat(others);
+        const visible = ordered.slice(0, 4);
+
+        visible.forEach(p => {
+          const card = document.createElement("article");
+          card.className = "card";
+
+          const header = document.createElement("div");
+          header.className = "card-header";
+
+          const titleWrap = document.createElement("div");
+          const title = document.createElement("div");
+          title.className = "card-title";
+          title.innerHTML = '<span class="name">' + p.name + "</span>";
+          const area = document.createElement("div");
+          area.className = "card-area";
+          area.textContent = p.area;
+          titleWrap.appendChild(title);
+          titleWrap.appendChild(area);
+
+          header.appendChild(titleWrap);
+
+          if (p.featured) {
+            const badge = document.createElement("div");
+            badge.className = "badge";
+            badge.textContent = "Today's pick";
+            header.appendChild(badge);
+          }
+
+          const deal = document.createElement("div");
+          deal.className = "deal-main";
+          deal.innerHTML = "<strong>Today's deal:</strong> " + p.deal;
+
+          const meta = document.createElement("div");
+          meta.className = "meta-row";
+
+          const timeSpan = document.createElement("span");
+          timeSpan.textContent = "🕒 " + p.timeWindow;
+
+          const statusSpan = document.createElement("span");
+          const dot = document.createElement("span");
+          dot.className = "status-dot" + (p.isOpen ? "" : " closed");
+          const statusText = document.createElement("span");
+          statusText.textContent = p.openStatus;
+          statusSpan.appendChild(dot);
+          statusSpan.appendChild(statusText);
+
+          meta.appendChild(timeSpan);
+          meta.appendChild(statusSpan);
+
+          const tagsRow = document.createElement("div");
+          tagsRow.className = "tag-row";
+          p.tags.forEach(function (t, i) {
+            const tag = document.createElement("span");
+            tag.className = "tag" + (i === 0 ? " good" : "");
+            tag.textContent = t;
+            tagsRow.appendChild(tag);
+          });
+
+          const actions = document.createElement("div");
+          actions.className = "card-actions";
+
+          const directionsBtn = document.createElement("button");
+          directionsBtn.className = "btn btn-primary";
+          directionsBtn.type = "button";
+          directionsBtn.textContent = "📍 Directions";
+          directionsBtn.onclick = function () {
+            window.open(p.mapsUrl, "_blank");
+          };
+
+          actions.appendChild(directionsBtn);
+
+          card.appendChild(header);
+          card.appendChild(deal);
+          card.appendChild(meta);
+          card.appendChild(tagsRow);
+          card.appendChild(actions);
+
+          cardsEl.appendChild(card);
+        });
+      }
+
+      dayLabelEl.textContent = formatDay();
+      shuffleBtn.addEventListener("click", renderList);
+      renderList();
+    });
+  </script>
+</body>
+</html>
