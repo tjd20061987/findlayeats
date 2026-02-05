@@ -120,9 +120,8 @@
     document.addEventListener("DOMContentLoaded", function () {
       // ------------------------------
       // DATA
-      // ------------------------------
-const places = [
-  // ⭐ FEATURED (daily shuffle)
+      const places = [
+  // ⭐ FEATURED
   {
     name: "Stix",
     area: "Downtown",
@@ -132,7 +131,8 @@ const places = [
     isOpen: true,
     tags: ["sushi", "hibachi", "downtown"],
     featured: true,
-    mapsUrl: "https://maps.google.com/?q=Stix+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Stix+Findlay+OH",
+    website: "https://stixfindlay.com/"
   },
   {
     name: "Japan West",
@@ -143,10 +143,11 @@ const places = [
     isOpen: true,
     tags: ["sushi", "japanese", "downtown"],
     featured: true,
-    mapsUrl: "https://maps.google.com/?q=Japan+West+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Japan+West+Findlay+OH",
+    website: "https://japanwestfindlay.com/"
   },
 
-  // ⭐ NON-FEATURED (shuffle button affects only these)
+  // ⭐ NON-FEATURED
   {
     name: "Asian Grill Findlay",
     area: "East side",
@@ -156,7 +157,8 @@ const places = [
     isOpen: true,
     tags: ["asian", "chinese", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Asian+Grill+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Asian+Grill+Findlay+OH",
+    website: "https://asiangrillfindlay.com/"
   },
   {
     name: "Logan's Irish Pub",
@@ -167,7 +169,8 @@ const places = [
     isOpen: true,
     tags: ["pub", "comfort food", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Logan's+Irish+Pub+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Logan's+Irish+Pub+Findlay+OH",
+    website: "https://logansirishpubfindlay.com/"
   },
   {
     name: "Alexandria's",
@@ -178,7 +181,8 @@ const places = [
     isOpen: true,
     tags: ["burgers", "drinks", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH",
+    website: "https://alexandriasfindlay.com/"
   },
   {
     name: "Oler's Bar & Grill",
@@ -189,7 +193,8 @@ const places = [
     isOpen: true,
     tags: ["tex-mex", "local favorite", "south side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Oler's+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Oler's+Findlay+OH",
+    website: "https://olersbarandgrill.com/"
   },
   {
     name: "Dark Horse Restaurant",
@@ -200,7 +205,8 @@ const places = [
     isOpen: false,
     tags: ["steak", "comfort food", "south side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH",
+    website: "https://www.darkhorsefindlay.com/"
   },
   {
     name: "Legends Steakhouse",
@@ -211,7 +217,8 @@ const places = [
     isOpen: false,
     tags: ["sports bar", "steak", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH",
+    website: "https://www.legendsfindlay.com/"
   },
   {
     name: "Circle of Friends",
@@ -222,7 +229,8 @@ const places = [
     isOpen: true,
     tags: ["comfort food", "homestyle", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Circle+of+Friends+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Circle+of+Friends+Findlay+OH",
+    website: "https://www.circleoffriendsfindlay.com/"
   },
   {
     name: "The Baker's Cafe",
@@ -233,7 +241,8 @@ const places = [
     isOpen: true,
     tags: ["lunch", "coffee", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Baker's+Cafe+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Baker's+Cafe+Findlay+OH",
+    website: "https://thebakerscafe.com/"
   },
   {
     name: "We Serve. Coffee",
@@ -244,7 +253,8 @@ const places = [
     isOpen: false,
     tags: ["coffee", "breakfast", "local"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=We+Serve+Coffee+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=We+Serve+Coffee+Findlay+OH",
+    website: "https://weservecoffee.com/"
   },
   {
     name: "Fort Findlay Coffee & Doughnut Shoppe",
@@ -255,7 +265,8 @@ const places = [
     isOpen: false,
     tags: ["breakfast", "donuts", "south side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Fort+Findlay+Coffee+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Fort+Findlay+Coffee+Findlay+OH",
+    website: "https://fortfindlaycoffee.com/"
   },
   {
     name: "Main Street Deli",
@@ -266,7 +277,8 @@ const places = [
     isOpen: true,
     tags: ["sandwiches", "lunch", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH",
+    website: "https://mainstreetdelifindlay.com/"
   },
   {
     name: "The Dough Hook",
@@ -277,7 +289,8 @@ const places = [
     isOpen: true,
     tags: ["deli", "lunch", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH",
+    website: "https://thedoughhook.com/"
   },
   {
     name: "Casa Fiesta",
@@ -288,7 +301,8 @@ const places = [
     isOpen: true,
     tags: ["mexican", "tacos", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Casa+Fiesta+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Casa+Fiesta+Findlay+OH",
+    website: "https://casafiestafindlay.com/"
   },
   {
     name: "La Charrita",
@@ -299,7 +313,8 @@ const places = [
     isOpen: true,
     tags: ["mexican", "authentic", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=La+Charrita+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=La+Charrita+Findlay+OH",
+    website: "https://www.facebook.com/lacharritafindlay/"
   },
   {
     name: "Gillig Winery",
@@ -310,7 +325,8 @@ const places = [
     isOpen: true,
     tags: ["wine", "flatbreads", "east side"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH",
+    website: "https://gilligwinery.com/"
   },
   {
     name: "The Wine Merchant",
@@ -321,7 +337,8 @@ const places = [
     isOpen: true,
     tags: ["wine", "cheese", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Wine+Merchant+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Wine+Merchant+Findlay+OH",
+    website: "https://thewinemerchantfindlay.com/"
   },
   {
     name: "The Bourbon Affair",
@@ -332,7 +349,8 @@ const places = [
     isOpen: true,
     tags: ["bourbon", "drinks", "downtown"],
     featured: false,
-    mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH"
+    mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH",
+    website: "https://thebourbonaffair.com/"
   }
 ];
 
@@ -484,3 +502,4 @@ const places = [
   </script>
 </body>
 </html>
+
