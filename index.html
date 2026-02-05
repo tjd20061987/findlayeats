@@ -403,127 +403,110 @@
         featured: false,
         mapsUrl: "https://maps.google.com/?q=Main+Street+Deli+Findlay+OH"
       },
+
+      /* ——— NEW RESTAURANTS ADDED BELOW ——— */
+
       {
-        name: "The Urban Market",
+        name: "Rossilli’s Restaurant",
         area: "Downtown",
-        deal: "Grab‑and‑go bowls and smoothies — healthy and fast.",
-        timeWindow: "9 AM – 3 PM",
-        openStatus: "Open now · healthy eats",
-        isOpen: true,
-        tags: ["healthy", "bowls", "downtown"],
+        deal: "Italian classics and $5 house wine during dinner hours.",
+        timeWindow: "5 PM – 8 PM",
+        openStatus: "Open later · Italian",
+        isOpen: false,
+        tags: ["italian", "dinner", "downtown"],
         featured: false,
-        mapsUrl: "https://maps.google.com/?q=Urban+Market+Findlay+OH"
+        mapsUrl: "https://maps.google.com/?q=Rossilli's+Findlay+OH"
+      },
+      {
+        name: "Gillig Winery",
+        area: "East side",
+        deal: "Flatbread + wine flight combo is a local favorite.",
+        timeWindow: "4 PM – 8 PM",
+        openStatus: "Open now · winery",
+        isOpen: true,
+        tags: ["wine", "flatbreads", "east side"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Gillig+Winery+Findlay+OH"
+      },
+      {
+        name: "Alexandria’s",
+        area: "Downtown",
+        deal: "Great burgers and rooftop drinks when the weather’s good.",
+        timeWindow: "11 AM – 10 PM",
+        openStatus: "Open now · bar & grill",
+        isOpen: true,
+        tags: ["burgers", "drinks", "downtown"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Alexandria's+Findlay+OH"
+      },
+      {
+        name: "The Greek Garden",
+        area: "Downtown",
+        deal: "Gyro + fries combo is a lunchtime staple.",
+        timeWindow: "11 AM – 3 PM",
+        openStatus: "Open now · Greek",
+        isOpen: true,
+        tags: ["greek", "lunch", "downtown"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Greek+Garden+Findlay+OH"
+      },
+      {
+        name: "Dark Horse Restaurant",
+        area: "South side",
+        deal: "Steak specials and hearty comfort food.",
+        timeWindow: "4 PM – 8 PM",
+        openStatus: "Open later · steakhouse",
+        isOpen: false,
+        tags: ["steak", "comfort food", "south side"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Dark+Horse+Findlay+OH"
+      },
+      {
+        name: "The Fern Café",
+        area: "South side",
+        deal: "Classic diner plates and great daily specials.",
+        timeWindow: "7 AM – 2 PM",
+        openStatus: "Morning only · diner",
+        isOpen: false,
+        tags: ["breakfast", "diner", "south side"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Fern+Cafe+Findlay+OH"
+      },
+      {
+        name: "Legends Steakhouse",
+        area: "East side",
+        deal: "Half‑off appetizers during game nights.",
+        timeWindow: "5 PM – 9 PM",
+        openStatus: "Open later · sports bar",
+        isOpen: false,
+        tags: ["sports bar", "steak", "east side"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Legends+Steakhouse+Findlay+OH"
+      },
+      {
+        name: "The Bourbon Affair",
+        area: "Downtown",
+        deal: "Premium bourbon flights and small plates.",
+        timeWindow: "5 PM – 11 PM",
+        openStatus: "Open now · bourbon bar",
+        isOpen: true,
+        tags: ["bourbon", "drinks", "downtown"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Bourbon+Affair+Findlay+OH"
+      },
+      {
+        name: "The Dough Hook",
+        area: "Downtown",
+        deal: "Fresh deli sandwiches and butcher‑shop specials.",
+        timeWindow: "10 AM – 3 PM",
+        openStatus: "Open now · deli",
+        isOpen: true,
+        tags: ["deli", "lunch", "downtown"],
+        featured: false,
+        mapsUrl: "https://maps.google.com/?q=Dough+Hook+Findlay+OH"
       }
     ];
 
     const cardsEl = document.getElementById("cards");
     const dayLabelEl = document.getElementById("day-label");
-    const shuffleBtn = document.getElementById("shuffle-btn");
-
-    function formatDay() {
-      const d = new Date();
-      const opts = { weekday: "long", month: "long", day: "numeric" };
-      return d.toLocaleDateString(undefined, opts);
-    }
-
-    function shuffle(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    function renderList() {
-      cardsEl.innerHTML = "";
-
-      const featured = shuffle(places.filter(p => p.featured));
-      const others = shuffle(places.filter(p => !p.featured));
-      const ordered = [...featured, ...others];
-
-      const visible = ordered.slice(0, 4);
-
-      visible.forEach(p => {
-        const card = document.createElement("article");
-        card.className = "card";
-
-        const header = document.createElement("div");
-        header.className = "card-header";
-
-        const titleWrap = document.createElement("div");
-        const title = document.createElement("div");
-        title.className = "card-title";
-        title.innerHTML = `<span class="name">${p.name}</span>`;
-        const area = document.createElement("div");
-        area.className = "card-area";
-        area.textContent = p.area;
-        titleWrap.appendChild(title);
-        titleWrap.appendChild(area);
-
-        header.appendChild(titleWrap);
-
-        if (p.featured) {
-          const badge = document.createElement("div");
-          badge.className = "badge";
-          badge.textContent = "Today’s pick";
-          header.appendChild(badge);
-        }
-
-        const deal = document.createElement("div");
-        deal.className = "deal-main";
-        deal.innerHTML = `<strong>Today’s deal:</strong> ${p.deal}`;
-
-        const meta = document.createElement("div");
-        meta.className = "meta-row";
-
-        const timeSpan = document.createElement("span");
-        timeSpan.innerHTML = `🕒 ${p.timeWindow}`;
-
-        const statusSpan = document.createElement("span");
-        const dot = document.createElement("span");
-        dot.className = "status-dot" + (p.isOpen ? "" : " closed");
-        const statusText = document.createElement("span");
-        statusText.textContent = p.openStatus;
-        statusSpan.appendChild(dot);
-        statusSpan.appendChild(statusText);
-
-        meta.appendChild(timeSpan);
-        meta.appendChild(statusSpan);
-
-        const tagsRow = document.createElement("div");
-        tagsRow.className = "tag-row";
-        p.tags.forEach((t, i) => {
-          const tag = document.createElement("span");
-          tag.className = "tag" + (i === 0 ? " good" : "");
-          tag.textContent = t;
-          tagsRow.appendChild(tag);
-        });
-
-        const actions = document.createElement("div");
-        actions.className = "card-actions";
-
-        const directionsBtn = document.createElement("button");
-        directionsBtn.className = "btn btn-primary";
-        directionsBtn.type = "button";
-        directionsBtn.textContent = "📍 Directions";
-        directionsBtn.onclick = () => window.open(p.mapsUrl, "_blank");
-
-        actions.appendChild(directionsBtn);
-
-        card.appendChild(header);
-        card.appendChild(deal);
-        card.appendChild(meta);
-        card.appendChild(tagsRow);
-        card.appendChild(actions);
-
-        cardsEl.appendChild(card);
-      });
-    }
-
-    dayLabelEl.textContent = formatDay();
-    shuffleBtn.addEventListener("click", renderList);
-    renderList();
-  </script>
-</body>
-</html>
+    const shuffleBtn = document.getElementById("
