@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #020617;
-      --accent: #f97316;
-      --accent-soft: rgba(249, 115, 22, 0.12);
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border: #1f2937;
-      --good: #22c55e;
-      --closed: #6b7280;
+      --bg: #F8F9FA;          /* soft off-white */
+      --card: #FFFFFF;        /* clean white */
+      --accent: #D62828;      /* modern red */
+      --accent-soft: rgba(214, 40, 40, 0.12);
+      --text: #001219;        /* deep navy */
+      --muted: #6C757D;       /* slate gray */
+      --border: #DEE2E6;      /* light gray border */
+      --good: #2ECC71;        /* green for open */
+      --closed: #6C757D;      /* muted gray */
     }
 
     * {
@@ -25,7 +25,7 @@
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-      background: radial-gradient(circle at top, #111827 0, #020617 55%);
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -37,10 +37,10 @@
     .shell {
       width: 100%;
       max-width: 720px;
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--card);
       border-radius: 1.25rem;
       border: 1px solid var(--border);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
       padding: 1.5rem 1.5rem 1.25rem;
     }
 
@@ -68,10 +68,10 @@
     .pill {
       border-radius: 999px;
       padding: 0.2rem 0.6rem;
-      background: rgba(15, 23, 42, 0.9);
+      background: #E9ECEF;
       border: 1px solid var(--border);
       font-size: 0.75rem;
-      color: var(--muted);
+      color: var(--text);
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
@@ -101,6 +101,7 @@
 
     .subline span#day-label {
       color: var(--text);
+      font-weight: 600;
     }
 
     .cards {
@@ -111,10 +112,11 @@
     }
 
     .card {
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--card);
       border-radius: 0.9rem;
       border: 1px solid var(--border);
       padding: 0.9rem 0.9rem 0.8rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
 
     .card-header {
@@ -195,15 +197,15 @@
     .tag {
       padding: 0.15rem 0.5rem;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
+      background: #E9ECEF;
       border: 1px solid var(--border);
       color: var(--muted);
     }
 
     .tag.good {
-      border-color: rgba(34, 197, 94, 0.4);
-      color: #bbf7d0;
-      background: rgba(22, 163, 74, 0.12);
+      border-color: rgba(214, 40, 40, 0.4);
+      color: var(--accent);
+      background: rgba(214, 40, 40, 0.12);
     }
 
     .card-actions {
@@ -227,13 +229,13 @@
 
     .btn-primary {
       background: var(--accent);
-      color: #111827;
+      color: white;
       font-weight: 600;
     }
 
     .btn-ghost {
       background: transparent;
-      color: var(--muted);
+      color: var(--text);
       border: 1px solid var(--border);
     }
 
@@ -381,12 +383,10 @@
     function renderList() {
       cardsEl.innerHTML = "";
 
-      // featured first, then shuffle within groups
       const featured = shuffle(places.filter(p => p.featured));
       const others = shuffle(places.filter(p => !p.featured));
       const ordered = [...featured, ...others];
 
-      // show top N (e.g., 4)
       const visible = ordered.slice(0, 4);
 
       visible.forEach(p => {
